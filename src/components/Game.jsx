@@ -13,7 +13,7 @@ function Game() {
   };
 
   const handleDraw = (card) => {
-    setPoints(points - 5); // ガチャ消費ポイント
+    setPoints(points - 5);
     setCollection([...collection, card]);
   };
 
