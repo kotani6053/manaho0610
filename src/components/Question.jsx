@@ -3,8 +3,8 @@ import React, { useState, useEffect } from 'react';
 function Question({ onCorrect }) {
   const [a, setA] = useState(0);
   const [b, setB] = useState(0);
-  const [answer, setAnswer] = useState('');
   const [difficulty, setDifficulty] = useState('easy');
+  const [answer, setAnswer] = useState('');
 
   useEffect(() => {
     const diff = Math.random() < 0.5 ? 'easy' : Math.random() < 0.5 ? 'normal' : 'hard';
@@ -15,9 +15,17 @@ function Question({ onCorrect }) {
     setAnswer('');
   }, [onCorrect]);
 
-  const checkAnswer = () => {
+  const handleClick = (num) => {
+    setAnswer(answer + num);
+  };
+
+  const handleClear = () => {
+    setAnswer('');
+  };
+
+  const handleSubmit = () => {
     if (parseInt(answer) === a + b) {
-      let pts = difficulty === 'easy' ? 1 : difficulty === 'normal' ? 3 : 5;
+      const pts = difficulty === 'easy' ? 1 : difficulty === 'normal' ? 3 : 5;
       onCorrect(pts);
     } else {
       alert('不正解！');
@@ -27,8 +35,16 @@ function Question({ onCorrect }) {
   return (
     <div>
       <p>問題: {a} + {b} = ? （難易度: {difficulty}）</p>
-      <input type="number" value={answer} onChange={(e) => setAnswer(e.target.value)} />
-      <button onClick={checkAnswer}>回答</button>
+      <div>
+        <input type="text" value={answer} readOnly />
+      </div>
+      <div className="calculator">
+        {[1,2,3,4,5,6,7,8,9,0].map((n) => (
+          <button key={n} onClick={() => handleClick(n.toString())}>{n}</button>
+        ))}
+        <button onClick={handleClear}>クリア</button>
+        <button onClick={handleSubmit}>回答</button>
+      </div>
     </div>
   );
 }
