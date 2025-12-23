@@ -1,11 +1,7 @@
 import React from 'react';
 
 function ScoreBoard({ points }) {
-  return (
-    <div>
-      <p>現在ポイント: {points}</p>
-    </div>
-  );
+  return <h3>現在ポイント: {points}</h3>;
 }
 
 export default ScoreBoard;
