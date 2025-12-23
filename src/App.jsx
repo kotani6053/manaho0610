@@ -4,7 +4,7 @@ import Game from './components/Game';
 function App() {
   return (
     <div className="app">
-      <h1>まなほの算数ゲーム</h1>
+      <h1>まなほのRPG算数ゲーム</h1>
       <Game />
     </div>
   );
