@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
-const PREFECTURES = [
+// 都道府県リストをこのファイルの中に直接書きます
+const PREFECTURES_LIST = [
   "北海道", "青森県", "岩手県", "宮城県", "秋田県", "山形県", "福島県",
   "茨城県", "栃木県", "群馬県", "埼玉県", "千葉県", "東京都", "神奈川県",
   "新潟県", "富山県", "石川県", "福井県", "山梨県", "長野県", "岐阜県",
@@ -21,7 +22,7 @@ function Gacha({ points, setPoints, obtained, setObtained }) {
     }
 
     setPoints(prev => prev - COST);
-    const picked = PREFECTURES[Math.floor(Math.random() * PREFECTURES.length)];
+    const picked = PREFECTURES_LIST[Math.floor(Math.random() * PREFECTURES_LIST.length)];
     setResult(picked);
 
     if (!obtained.includes(picked)) {
