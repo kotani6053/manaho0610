@@ -2,27 +2,26 @@ import React, { useState } from 'react';
 import Question from './Question';
 import ScoreBoard from './ScoreBoard';
 import Gacha from './Gacha';
-import Collection from './Collection';
+import MapCollection from './MapCollection';
 
 function Game() {
   const [points, setPoints] = useState(0);
-  const [collection, setCollection] = useState([]);
+  const [obtained, setObtained] = useState([]);
 
-  const handleCorrect = (pts) => {
-    setPoints(points + pts);
-  };
-
-  const handleDraw = (card) => {
+  const handleCorrect = (pts) => setPoints(points + pts);
+  const handleDraw = (pref) => {
     setPoints(points - 5);
-    setCollection([...collection, card]);
+    setObtained([...obtained, pref]);
   };
 
   return (
-    <div>
-      <ScoreBoard points={points} />
-      <Question onCorrect={handleCorrect} />
-      <Gacha points={points} onDraw={handleDraw} cost={5} />
-      <Collection cards={collection} />
+    <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+      <div>
+        <ScoreBoard points={points} />
+        <Question onCorrect={handleCorrect} />
+        <Gacha points={points} cost={5} obtained={obtained} onDraw={handleDraw} />
+      </div>
+      <MapCollection obtained={obtained} />
     </div>
   );
 }
