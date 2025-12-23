@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-// 都道府県リストをこのファイルの中に直接書きます
+// 都道府県リストをファイル内に直接書くことで、constants エラーを防ぎます
 const PREFECTURES_LIST = [
   "北海道", "青森県", "岩手県", "宮城県", "秋田県", "山形県", "福島県",
   "茨城県", "栃木県", "群馬県", "埼玉県", "千葉県", "東京都", "神奈川県",
@@ -17,7 +17,7 @@ function Gacha({ points, setPoints, obtained, setObtained }) {
 
   const draw = () => {
     if (points < COST) {
-      alert("ポイントが足りないよ！");
+      alert("ポイントが足りないよ！算数でためてね。");
       return;
     }
 
@@ -37,19 +37,22 @@ function Gacha({ points, setPoints, obtained, setObtained }) {
         style={{
           backgroundColor: '#eab308',
           color: 'white',
-          padding: '10px 20px',
-          borderRadius: '8px',
+          padding: '12px 24px',
+          borderRadius: '12px',
           border: 'none',
+          fontSize: '18px',
           fontWeight: 'bold',
-          cursor: 'pointer'
+          cursor: 'pointer',
+          boxShadow: '0 4px 0 #ca8a04'
         }}
       >
         ガチャを引く ({COST}pt)
       </button>
+      
       {result && (
-        <div style={{ marginTop: '15px' }}>
-          <p style={{ margin: 0, fontSize: '12px' }}>結果は...</p>
-          <p style={{ fontSize: '24px', fontWeight: 'bold', color: '#1d4ed8', margin: '5px 0' }}>{result}</p>
+        <div style={{ marginTop: '20px', padding: '15px', backgroundColor: '#f0f9ff', borderRadius: '10px', border: '2px dashed #3b82f6' }}>
+          <p style={{ margin: 0, fontSize: '14px', color: '#64748b' }}>ガチャの結果...</p>
+          <p style={{ fontSize: '28px', fontWeight: 'bold', color: '#1d4ed8', margin: '10px 0' }}>{result}</p>
         </div>
       )}
     </div>
