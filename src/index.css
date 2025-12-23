@@ -1,0 +1,18 @@
+body {
+  font-family: sans-serif;
+  text-align: center;
+  padding: 2rem;
+}
+
+input {
+  width: 50px;
+  margin-right: 0.5rem;
+}
+
+button {
+  padding: 0.5rem 1rem;
+}
+
+h1 {
+  color: #333;
+}
