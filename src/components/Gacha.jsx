@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 
-// 47都道府県のリスト
 const PREFECTURES = [
   "北海道", "青森県", "岩手県", "宮城県", "秋田県", "山形県", "福島県",
   "茨城県", "栃木県", "群馬県", "埼玉県", "千葉県", "東京都", "神奈川県",
@@ -11,47 +10,45 @@ const PREFECTURES = [
   "熊本県", "大分県", "宮崎県", "鹿児島県", "沖縄県"
 ];
 
-function Gacha({ points, cost, onDraw }) {
-  const [lastResult, setLastResult] = useState(null);
+function Gacha({ points, setPoints, obtained, setObtained }) {
+  const COST = 5;
+  const [result, setResult] = useState(null);
 
-  const pullGacha = () => {
-    if (points < cost) {
-      alert("ポイントが足りないよ！算数で貯めてね。");
+  const draw = () => {
+    if (points < COST) {
+      alert("ポイントが足りないよ！");
       return;
     }
 
-    // ランダムに1つ選択
-    const randomIndex = Math.floor(Math.random() * PREFECTURES.length);
-    const selectedPref = PREFECTURES[randomIndex];
+    setPoints(prev => prev - COST);
+    const picked = PREFECTURES[Math.floor(Math.random() * PREFECTURES.length)];
+    setResult(picked);
 
-    // 表示用の状態を更新
-    setLastResult(selectedPref);
-
-    // App.jsx の handleDraw を呼び出して、ポイント消費とコレクション追加を行う
-    onDraw(selectedPref);
+    if (!obtained.includes(picked)) {
+      setObtained(prev => [...prev, picked]);
+    }
   };
 
   return (
-    <div style={{ textAlign: 'center', marginTop: '10px' }}>
+    <div style={{ textAlign: 'center' }}>
       <button 
-        onClick={pullGacha}
+        onClick={draw}
         style={{
+          backgroundColor: '#eab308',
+          color: 'white',
           padding: '10px 20px',
-          fontSize: '16px',
-          cursor: 'pointer',
-          backgroundColor: '#fbbf24',
-          border: 'none',
           borderRadius: '8px',
-          fontWeight: 'bold'
+          border: 'none',
+          fontWeight: 'bold',
+          cursor: 'pointer'
         }}
       >
-        ガチャを引く ({cost}pt)
+        ガチャを引く ({COST}pt)
       </button>
-
-      {lastResult && (
-        <div style={{ marginTop: '15px', animation: 'bounce 0.5s' }}>
-          <p style={{ fontSize: '14px', color: '#666' }}>ガチャの結果...</p>
-          <strong style={{ fontSize: '24px', color: '#1d4ed8' }}>{lastResult}</strong>
+      {result && (
+        <div style={{ marginTop: '15px' }}>
+          <p style={{ margin: 0, fontSize: '12px' }}>結果は...</p>
+          <p style={{ fontSize: '24px', fontWeight: 'bold', color: '#1d4ed8', margin: '5px 0' }}>{result}</p>
         </div>
       )}
     </div>
