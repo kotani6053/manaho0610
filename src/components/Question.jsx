@@ -15,14 +15,8 @@ function Question({ onCorrect }) {
     setAnswer('');
   }, [onCorrect]);
 
-  const handleClick = (num) => {
-    setAnswer(answer + num);
-  };
-
-  const handleClear = () => {
-    setAnswer('');
-  };
-
+  const handleClick = (num) => setAnswer(answer + num);
+  const handleClear = () => setAnswer('');
   const handleSubmit = () => {
     if (parseInt(answer) === a + b) {
       const pts = difficulty === 'easy' ? 1 : difficulty === 'normal' ? 3 : 5;
@@ -35,13 +29,9 @@ function Question({ onCorrect }) {
   return (
     <div>
       <p>問題: {a} + {b} = ? （難易度: {difficulty}）</p>
-      <div>
-        <input type="text" value={answer} readOnly />
-      </div>
+      <input type="text" value={answer} readOnly />
       <div className="calculator">
-        {[1,2,3,4,5,6,7,8,9,0].map((n) => (
-          <button key={n} onClick={() => handleClick(n.toString())}>{n}</button>
-        ))}
+        {[1,2,3,4,5,6,7,8,9,0].map(n => <button key={n} onClick={() => handleClick(n.toString())}>{n}</button>)}
         <button onClick={handleClear}>クリア</button>
         <button onClick={handleSubmit}>回答</button>
       </div>
