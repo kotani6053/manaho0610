@@ -1,52 +1,61 @@
 import React, { useState } from 'react';
-import { PREFECTURES } from './constants'; // 上記のデータ
 
-function Gacha({ points, setPoints, obtained, setObtained }) {
-  const [result, setResult] = useState(null);
-  const GACHA_COST = 100; // 1回100ポイント
+// 47都道府県のリスト
+const PREFECTURES = [
+  "北海道", "青森県", "岩手県", "宮城県", "秋田県", "山形県", "福島県",
+  "茨城県", "栃木県", "群馬県", "埼玉県", "千葉県", "東京都", "神奈川県",
+  "新潟県", "富山県", "石川県", "福井県", "山梨県", "長野県", "岐阜県",
+  "静岡県", "愛知県", "三重県", "滋賀県", "京都府", "大阪府", "兵庫県",
+  "奈良県", "和歌山県", "鳥取県", "島根県", "岡山県", "広島県", "山口県",
+  "徳島県", "香川県", "愛媛県", "高知県", "福岡県", "佐賀県", "長崎県",
+  "熊本県", "大分県", "宮崎県", "鹿児島県", "沖縄県"
+];
 
-  const drawGacha = () => {
-    if (points < GACHA_COST) {
-      alert("ポイントが足りません！算数で貯めてね。");
+function Gacha({ points, cost, onDraw }) {
+  const [lastResult, setLastResult] = useState(null);
+
+  const pullGacha = () => {
+    if (points < cost) {
+      alert("ポイントが足りないよ！算数で貯めてね。");
       return;
     }
 
-    // 1. ポイント消費
-    setPoints(prev => prev - GACHA_COST);
-
-    // 2. ランダム抽選
+    // ランダムに1つ選択
     const randomIndex = Math.floor(Math.random() * PREFECTURES.length);
-    const selected = PREFECTURES[randomIndex];
+    const selectedPref = PREFECTURES[randomIndex];
 
-    // 3. 結果を保存（重複チェック）
-    setResult(selected);
-    if (!obtained.includes(selected)) {
-      setObtained(prev => [...prev, selected]);
-    }
+    // 表示用の状態を更新
+    setLastResult(selectedPref);
+
+    // App.jsx の handleDraw を呼び出して、ポイント消費とコレクション追加を行う
+    onDraw(selectedPref);
   };
 
   return (
-    <div className="p-4 border rounded-lg bg-white shadow-md text-center">
-      <h2 className="text-xl font-bold mb-4">日本地図ガチャ</h2>
-      <p className="mb-2">現在のポイント: {points} pt</p>
-      
+    <div style={{ textAlign: 'center', marginTop: '10px' }}>
       <button 
-        onClick={drawGacha}
-        className="bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-2 px-6 rounded-full transition-transform active:scale-95"
+        onClick={pullGacha}
+        style={{
+          padding: '10px 20px',
+          fontSize: '16px',
+          cursor: 'pointer',
+          backgroundColor: '#fbbf24',
+          border: 'none',
+          borderRadius: '8px',
+          fontWeight: 'bold'
+        }}
       >
-        100ptでガチャを引く！
+        ガチャを引く ({cost}pt)
       </button>
 
-      {result && (
-        <div className="mt-4 p-4 bg-blue-50 border-2 border-blue-200 rounded animate-bounce">
-          <p className="text-sm text-blue-600">ガチャの結果...</p>
-          <p className="text-2xl font-black">{result}</p>
-          {obtained.filter(p => p === result).length > 1 ? 
-            <span className="text-xs text-red-500">（ダブリ！）</span> : 
-            <span className="text-xs text-green-500">（NEW!）</span>
-          }
+      {lastResult && (
+        <div style={{ marginTop: '15px', animation: 'bounce 0.5s' }}>
+          <p style={{ fontSize: '14px', color: '#666' }}>ガチャの結果...</p>
+          <strong style={{ fontSize: '24px', color: '#1d4ed8' }}>{lastResult}</strong>
         </div>
       )}
     </div>
   );
 }
+
+export default Gacha;
