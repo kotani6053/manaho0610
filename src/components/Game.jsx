@@ -33,7 +33,7 @@ const QUIZ_DATA = [
   { pref: "ならけん", city: "ならし", options: ["ならし", "かしはらし", "いこまし"] },
   { pref: "わかやまけん", city: "わかやまし", options: ["わかやまし", "たなべし", "きのかわし"] },
   { pref: "とっとりけん", city: "とっとりし", options: ["とっとりし", "よなごし", "くらよしし"] },
-  { pref: "しまねけん", city: "まつえし", options: ["まつえし", "いずもし", "はmadaし"] },
+  { pref: "しまねけん", city: "まつえし", options: ["まつえし", "いずもし", "はまだし"] },
   { pref: "おかやまけん", city: "おかやまし", options: ["おかやまし", "くらしきし", "つやまし"] },
   { pref: "ひろしまけん", city: "ひろしまし", options: ["ひろしまし", "ふくやまし", "くれし"] },
   { pref: "やまぐちけん", city: "やまぐちし", options: ["やまぐちし", "しものせきし", "うべし"] },
@@ -58,16 +58,37 @@ function Game({ onWin, obtainedCount }) {
   const [quiz, setQuiz] = useState(null);
   const isMaster = obtainedCount === 47;
 
+  // さんすう問題の作成（バグ修正版）
   const generateMath = useCallback(() => {
-    const a = Math.floor(Math.random() * 20) + 10;
-    const b = Math.floor(Math.random() * 15) + 5;
-    const c = Math.floor(Math.random() * 10) + 1;
-    const type = Math.floor(Math.random() * 3);
-    let res, text;
-    if (type === 0) { res = a + b + c; text = `${a} + ${b} + ${c}`; }
-    else if (type === 1) { res = a + b - c; text = `${a} + ${b} - ${c}`; }
-    else { res = a - b + c; text = `${a > b ? a : b + 10} - ${b} + ${c}`; }
-    setQText(text); setAns(res); setInput('');
+    let a, b, c, res, text;
+    const type = Math.floor(Math.random() * 3); // 0: たし算のみ, 1: たして引く, 2: 引いてたす
+
+    if (type === 0) {
+      // a + b + c
+      a = Math.floor(Math.random() * 10) + 5;
+      b = Math.floor(Math.random() * 10) + 5;
+      c = Math.floor(Math.random() * 10) + 2;
+      res = a + b + c;
+      text = `${a} + ${b} + ${c}`;
+    } else if (type === 1) {
+      // a + b - c (a+bがcより大きくなるように設定)
+      a = Math.floor(Math.random() * 15) + 10;
+      b = Math.floor(Math.random() * 15) + 10;
+      res = Math.floor(Math.random() * 15) + 5; // 答えを先に決める
+      c = (a + b) - res; // cを逆算
+      text = `${a} + ${b} - ${c}`;
+    } else {
+      // a - b + c (aがbより大きくなるように設定)
+      a = Math.floor(Math.random() * 20) + 20;
+      b = Math.floor(Math.random() * 15) + 5;
+      c = Math.floor(Math.random() * 10) + 5;
+      res = a - b + c;
+      text = `${a} - ${b} + ${c}`;
+    }
+
+    setQText(text);
+    setAns(res);
+    setInput('');
   }, []);
 
   const generateQuiz = useCallback(() => {
@@ -82,15 +103,23 @@ function Game({ onWin, obtainedCount }) {
   }, [isMaster, generateMath, generateQuiz]);
 
   const handleMathSubmit = () => {
-    if (parseInt(input) === ans) { onWin(20); generateMath(); }
-    else { alert(`ざんねん！ せいかいは ${ans}`); setInput(''); }
+    if (parseInt(input) === ans) {
+      onWin(20);
+      generateMath();
+    } else {
+      alert(`ざんねん！ せいかいは ${ans}`);
+      setInput('');
+    }
   };
 
   const handleQuizSubmit = (choice) => {
     if (choice === quiz.city) {
-      alert("せいかい！ すごい！！"); onWin(100); generateQuiz();
+      alert("せいかい！ すごい！！");
+      onWin(100);
+      generateQuiz();
     } else {
-      alert(`ざんねん！ ${quiz.pref} の けんちょうしょざいち は 「${quiz.city}」 だよ`); generateQuiz();
+      alert(`ざんねん！ ${quiz.pref} の けんちょうしょざいち は 「${quiz.city}」 だよ`);
+      generateQuiz();
     }
   };
 
@@ -126,6 +155,6 @@ const quizBtnStyle = {
   padding: '8px', fontSize: '14px', cursor: 'pointer', borderRadius: '8px', 
   border: '1px solid #3b82f6', backgroundColor: '#fff', fontWeight: 'bold', color: '#1e40af' 
 };
-const numBtnStyle = { padding: '10px', fontSize: '16px', borderRadius: '5px', border: '1px solid #ddd', backgroundColor: '#fff' };
+const numBtnStyle = { padding: '10px', fontSize: '16px', borderRadius: '5px', border: '1px solid #ddd', backgroundColor: '#fff', cursor: 'pointer' };
 
 export default Game;
