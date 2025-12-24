@@ -1,106 +1,57 @@
 import React from 'react';
 
+const PREFECTURES = [
+  "北海道", "青森県", "岩手県", "宮城県", "秋田県", "山形県", "福島県",
+  "茨城県", "栃木県", "群馬県", "埼玉県", "千葉県", "東京都", "神奈川県",
+  "新潟県", "富山県", "石川県", "福井県", "山梨県", "長野県", "岐阜県",
+  "静岡県", "愛知県", "三重県", "滋賀県", "京都府", "大阪府", "兵庫県",
+  "奈良県", "和歌山県", "鳥取県", "島根県", "岡山県", "広島県", "山口県",
+  "徳島県", "香川県", "愛媛県", "高知県", "福岡県", "佐賀県", "長崎県",
+  "熊本県", "大分県", "宮崎県", "鹿児島県", "沖縄県"
+];
+
 function MapCollection({ obtained }) {
-  // 都道府県を視覚的に大きく見せるためのコンテナ
   return (
-    <div style={{ 
-      width: '100%', 
-      height: '100%', 
-      display: 'flex', 
-      flexDirection: 'column',
-      position: 'relative'
-    }}>
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'space-between', 
-        alignItems: 'center',
-        marginBottom: '10px'
-      }}>
-        <h2 style={{ margin: 0, fontSize: '20px', color: '#1e3a8a' }}>🗾 日本地図コレクション</h2>
-        <div style={{ 
-          padding: '4px 12px', 
-          backgroundColor: '#eff6ff', 
-          borderRadius: '20px', 
-          fontSize: '14px', 
-          fontWeight: 'bold', 
-          color: '#2563eb',
-          border: '1px solid #dbeafe'
-        }}>
-          {obtained.length} / 47 完成
-        </div>
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
+        <h2 style={{ margin: 0, fontSize: '18px', color: '#1e3a8a' }}>🗾 日本地図パズル</h2>
+        <span style={{ fontWeight: 'bold', color: '#3b82f6' }}>{obtained.length} / 47 完成</span>
       </div>
-
+      
       <div style={{ 
-        flex: 1, 
-        width: '100%', 
-        backgroundColor: '#f0f9ff', // 海をイメージした薄い青
-        borderRadius: '12px',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        position: 'relative',
-        overflow: 'hidden',
-        border: '1px solid #e0f2fe'
+        flex: 1,
+        display: 'grid', 
+        gridTemplateColumns: 'repeat(auto-fill, minmax(80px, 1fr))', // タイルを大きく配置
+        gridAutoRows: 'minmax(50px, 1fr)',
+        gap: '6px', 
+        overflowY: 'auto',
+        padding: '10px',
+        backgroundColor: '#f8fafc',
+        borderRadius: '8px',
+        border: '1px solid #e2e8f0'
       }}>
-        {/* 実際の地図SVGを使用する場合、ここが 100% で広がります。
-            今は仮の巨大アイコンとリストでサイズ感を出しています。
-        */}
-        <div style={{ 
-          width: '90%', 
-          height: '90%', 
-          display: 'flex', 
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          gap: '20px'
-        }}>
-          {/* 地図のイメージを大きく配置 */}
-          <div style={{ 
-            fontSize: '180px', 
-            filter: 'drop-shadow(0 10px 8px rgb(0 0 0 / 0.1))',
-            userSelect: 'none'
-          }}>
-            🗾
-          </div>
-
-          {/* 獲得した都道府県のタグクラウド（地図の周りに散りばめるイメージ） */}
-          <div style={{ 
-            display: 'flex', 
-            flexWrap: 'wrap', 
-            gap: '6px', 
-            justifyContent: 'center',
-            maxWidth: '100%',
-            overflowY: 'auto'
-          }}>
-            {obtained.length === 0 ? (
-              <p style={{ color: '#94a3b8', fontSize: '14px' }}>まだピースがありません。ガチャを引いてみよう！</p>
-            ) : (
-              obtained.map((name, index) => (
-                <span key={index} style={{
-                  padding: '4px 10px',
-                  backgroundColor: '#3b82f6',
-                  color: 'white',
-                  borderRadius: '6px',
-                  fontSize: '12px',
-                  fontWeight: 'bold',
-                  boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-                  animation: 'popIn 0.3s ease-out'
-                }}>
-                  {name}
-                </span>
-              ))
-            )}
-          </div>
-        </div>
+        {PREFECTURES.map(pref => {
+          const isObtained = obtained.includes(pref);
+          return (
+            <div key={pref} style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderRadius: '6px',
+              fontSize: '12px',
+              fontWeight: 'bold',
+              transition: 'all 0.3s ease',
+              backgroundColor: isObtained ? '#3b82f6' : '#e2e8f0',
+              color: isObtained ? 'white' : '#94a3b8',
+              border: isObtained ? 'none' : '1px dashed #cbd5e1',
+              boxShadow: isObtained ? '0 2px 4px rgba(59, 130, 246, 0.4)' : 'none',
+              transform: isObtained ? 'scale(1.02)' : 'scale(1)'
+            }}>
+              {pref}
+            </div>
+          );
+        })}
       </div>
-
-      {/* アニメーション用のCSS */}
-      <style>{`
-        @keyframes popIn {
-          0% { transform: scale(0.5); opacity: 0; }
-          100% { transform: scale(1); opacity: 1; }
-        }
-      `}</style>
     </div>
   );
 }
