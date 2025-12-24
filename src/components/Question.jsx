@@ -85,9 +85,10 @@ function Question({ onCorrect }) {
   );
 }
 
+// Question.jsx の return 部分のボタンスタイルを調整
 const btnStyle = {
-  padding: '12px',
-  fontSize: '20px',
+  padding: '8px', // 12pxから8pxに短縮
+  fontSize: '18px',
   cursor: 'pointer',
   border: '1px solid #ddd',
   borderRadius: '8px',
