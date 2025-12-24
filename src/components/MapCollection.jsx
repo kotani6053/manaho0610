@@ -1,6 +1,5 @@
 import React from 'react';
 
-// 位置データ（topの値を少しずつ詰めて、全体を上に寄せています）
 const PREFECTURES = [
   { name: "北海道", top: "2%", left: "70%", width: "60px", height: "40px" },
   { name: "青森", top: "16%", left: "66%" }, { name: "秋田", top: "22%", left: "64%" }, { name: "岩手", top: "22%", left: "70%" },
@@ -26,7 +25,9 @@ function MapCollection({ obtained }) {
     <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
         <h2 style={{ margin: 0, fontSize: '16px', color: '#1e3a8a' }}>🗾 日本地図パズル</h2>
-        <span style={{ fontWeight: 'bold', color: '#1e3a8a' }}>{obtained.length} / 47</span>
+        <span style={{ fontWeight: 'bold', color: '#1e3a8a', backgroundColor: '#f0f9ff', padding: '2px 8px', borderRadius: '5px' }}>
+          {obtained.length} / 47
+        </span>
       </div>
       
       <div style={{ 
@@ -35,11 +36,41 @@ function MapCollection({ obtained }) {
         borderRadius: '12px', 
         position: 'relative', 
         border: '1px solid #bde0fe',
-        maxHeight: 'calc(100vh - 150px)' // 画面からはみ出さないストッパー
+        overflow: 'hidden',
+        maxHeight: 'calc(100vh - 150px)',
+        boxShadow: 'inset 0 2px 10px rgba(0,0,0,0.03)'
       }}>
-        {/* 都道府県の配置（前回の「かなり良い」と言っていただけた座標を維持） */}
         {PREFECTURES.map(pref => {
-          // ... (前回のマッピング処理)
+          // 県名、県、府、都のどれかが obtained に含まれているか判定
+          const isObtained = obtained.includes(pref.name) || 
+                             obtained.includes(pref.name + "県") || 
+                             obtained.includes(pref.name + "府") || 
+                             obtained.includes(pref.name + "都");
+          
+          return (
+            <div key={pref.name} style={{
+              position: 'absolute',
+              top: pref.top,
+              left: pref.left,
+              width: pref.width || '36px',
+              height: pref.height || '26px',
+              backgroundColor: isObtained ? '#3b82f6' : '#ffffff',
+              color: isObtained ? '#000000' : '#cbd5e1', // 獲得時は黒文字、未獲得は薄いグレー
+              border: isObtained ? '2px solid #1d4ed8' : '1px solid #e2e8f0',
+              borderRadius: '4px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '11px',
+              fontWeight: 'bold',
+              transition: 'all 0.3s ease',
+              boxShadow: isObtained ? '0 3px 6px rgba(0,0,0,0.16)' : 'none',
+              zIndex: isObtained ? 10 : 1,
+              whiteSpace: 'nowrap'
+            }}>
+              {pref.name}
+            </div>
+          );
         })}
       </div>
     </div>
