@@ -20,52 +20,53 @@ function App() {
     localStorage.setItem('obtained-prefectures', JSON.stringify(obtained));
   }, [points, obtained]);
 
-  // 【修正】ピースとポイントをすべてゼロにする関数
   const handleReset = () => {
     if (window.confirm("これまでの記録をすべて消して、最初からやり直しますか？")) {
-      setObtained([]); // 地図を空にする
-      setPoints(0);    // ポイントも0にする
-      localStorage.clear(); // 保存データも削除
+      setObtained([]);
+      setPoints(0);
+      localStorage.clear();
     }
   };
 
   return (
     <div style={{ 
       height: '100vh', 
-      maxHeight: '100vh', 
+      width: '100vw',
       overflow: 'hidden', 
       display: 'flex', 
       flexDirection: 'column',
       padding: '10px',
       boxSizing: 'border-box',
-      backgroundColor: '#f8fafc'
+      backgroundColor: '#f1f5f9',
+      fontFamily: '"Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif'
     }}>
       <header style={{ 
         textAlign: 'center', 
-        padding: '10px', 
-        backgroundColor: '#2563eb', 
+        padding: '8px', 
+        backgroundColor: '#1e40af', 
         color: 'white', 
-        borderRadius: '10px', 
+        borderRadius: '12px', 
         marginBottom: '10px',
-        position: 'relative'
+        position: 'relative',
+        boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
       }}>
-        <h1 style={{ margin: 0, fontSize: '20px' }}>RPG算数：日本制覇</h1>
+        <h1 style={{ margin: 0, fontSize: '18px', letterSpacing: '1px' }}>RPG算数：日本制覇への道</h1>
         <ScoreBoard points={points} collectionCount={obtained.length} />
         
-        {/* 小さいリセットボタン */}
         <button 
           onClick={handleReset}
           style={{
             position: 'absolute',
-            right: '10px',
-            top: '10px',
+            right: '15px',
+            top: '50%',
+            transform: 'translateY(-50%)',
             fontSize: '10px',
-            backgroundColor: 'rgba(255,255,255,0.2)',
+            backgroundColor: 'rgba(255,255,255,0.15)',
             color: 'white',
-            border: '1px solid white',
-            borderRadius: '4px',
+            border: '1px solid rgba(255,255,255,0.4)',
+            borderRadius: '6px',
             cursor: 'pointer',
-            padding: '2px 5px'
+            padding: '4px 8px'
           }}
         >
           データを消す
@@ -74,29 +75,35 @@ function App() {
 
       <div style={{ 
         display: 'grid', 
-        gridTemplateColumns: '1fr 1.5fr', 
-        gap: '10px',
+        gridTemplateColumns: '280px 1fr', // 左側を固定し、右側（地図）を最大化
+        gap: '12px',
         flex: 1,
         minHeight: 0 
       }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', overflowY: 'auto' }}>
-          <section style={{ padding: '15px', border: '2px solid #22c55e', borderRadius: '10px', backgroundColor: 'white' }}>
-            <h2 style={{ marginTop: 0, fontSize: '16px', color: '#16a34a' }}>⚔️ 算数クエスト</h2>
+        {/* 左側：操作パネル */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', overflowY: 'auto', paddingRight: '4px' }}>
+          <section style={{ padding: '12px', border: '1px solid #bbf7d0', borderRadius: '12px', backgroundColor: 'white', boxShadow: '0 1px 3px 0 rgb(0 0 0 / 0.1)' }}>
+            <h2 style={{ marginTop: 0, fontSize: '15px', color: '#16a34a', display: 'flex', alignItems: 'center', gap: '5px' }}>⚔️ 算数クエスト</h2>
             <Game onWin={(pts) => setPoints(prev => prev + pts)} />
           </section>
 
-          <section style={{ padding: '15px', border: '2px solid #eab308', borderRadius: '10px', backgroundColor: 'white' }}>
-            <h2 style={{ marginTop: 0, fontSize: '16px', color: '#ca8a04' }}>💎 ガチャ</h2>
+          <section style={{ padding: '12px', border: '1px solid #fef08a', borderRadius: '12px', backgroundColor: 'white', boxShadow: '0 1px 3px 0 rgb(0 0 0 / 0.1)' }}>
+            <h2 style={{ marginTop: 0, fontSize: '15px', color: '#ca8a04', display: 'flex', alignItems: 'center', gap: '5px' }}>💎 ガチャ</h2>
             <Gacha points={points} setPoints={setPoints} obtained={obtained} setObtained={setObtained} />
           </section>
+          
+          <div style={{ marginTop: 'auto', padding: '10px', fontSize: '11px', color: '#94a3b8', textAlign: 'center' }}>
+            全ての都道府県を集めて日本を完成させよう！
+          </div>
         </div>
 
+        {/* 右側：メイン地図エリア */}
         <section style={{ 
-          padding: '10px', 
-          border: '2px solid #3b82f6', 
-          borderRadius: '10px', 
+          padding: '15px', 
+          border: '1px solid #bfdbfe', 
+          borderRadius: '16px', 
           backgroundColor: 'white',
-          overflow: 'hidden',
+          boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
           display: 'flex',
           flexDirection: 'column'
         }}>
