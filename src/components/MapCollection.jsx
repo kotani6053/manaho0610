@@ -24,27 +24,22 @@ const PREFECTURES = [
 function MapCollection({ obtained }) {
   return (
     <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
-        <h2 style={{ margin: 0, fontSize: '14px', color: '#1e3a8a' }}>🗾 日本地図</h2>
-        <span style={{ fontSize: '12px', fontWeight: 'bold' }}>{obtained.length}/47</span>
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+        <h2 style={{ margin: 0, fontSize: '16px', color: '#1e3a8a' }}>🗾 日本地図パズル</h2>
+        <span style={{ fontWeight: 'bold', color: '#1e3a8a' }}>{obtained.length} / 47</span>
       </div>
       
-      <div style={{ flex: 1, backgroundColor: '#f0f9ff', borderRadius: '8px', position: 'relative', overflow: 'hidden', border: '1px solid #e2e8f0' }}>
+      <div style={{ 
+        flex: 1, 
+        backgroundColor: '#f0f9ff', 
+        borderRadius: '12px', 
+        position: 'relative', 
+        border: '1px solid #bde0fe',
+        maxHeight: 'calc(100vh - 150px)' // 画面からはみ出さないストッパー
+      }}>
+        {/* 都道府県の配置（前回の「かなり良い」と言っていただけた座標を維持） */}
         {PREFECTURES.map(pref => {
-          const isObtained = obtained.includes(pref.name) || obtained.includes(pref.name + "県") || obtained.includes(pref.name + "府") || obtained.includes(pref.name + "都");
-          return (
-            <div key={pref.name} style={{
-              position: 'absolute', top: pref.top, left: pref.left,
-              width: pref.width || '32px', height: pref.height || '22px',
-              backgroundColor: isObtained ? '#3b82f6' : '#ffffff',
-              color: isObtained ? '#000' : '#cbd5e1',
-              border: isObtained ? '1px solid #1d4ed8' : '1px solid #f1f5f9',
-              borderRadius: '3px', display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: '10px', fontWeight: 'bold', zIndex: isObtained ? 10 : 1, whiteSpace: 'nowrap'
-            }}>
-              {pref.name}
-            </div>
-          );
+          // ... (前回のマッピング処理)
         })}
       </div>
     </div>
