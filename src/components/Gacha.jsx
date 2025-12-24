@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 
-// 都道府県リストをファイル内に直接書くことで、constants エラーを防ぎます
 const PREFECTURES_LIST = [
   "北海道", "青森県", "岩手県", "宮城県", "秋田県", "山形県", "福島県",
   "茨城県", "栃木県", "群馬県", "埼玉県", "千葉県", "東京都", "神奈川県",
@@ -14,10 +13,11 @@ const PREFECTURES_LIST = [
 function Gacha({ points, setPoints, obtained, setObtained }) {
   const COST = 5;
   const [result, setResult] = useState(null);
+  const [isNew, setIsNew] = useState(false);
 
   const draw = () => {
     if (points < COST) {
-      alert("ポイントが足りないよ！算数でためてね。");
+      alert("ポイントが足りないよ！");
       return;
     }
 
@@ -25,7 +25,13 @@ function Gacha({ points, setPoints, obtained, setObtained }) {
     const picked = PREFECTURES_LIST[Math.floor(Math.random() * PREFECTURES_LIST.length)];
     setResult(picked);
 
-    if (!obtained.includes(picked)) {
+    // すでに持っているかチェック
+    if (obtained.includes(picked)) {
+      setIsNew(false);
+      // ダブった時の特典（例：1ポイント返金）を入れるならここ
+      // setPoints(prev => prev + 1); 
+    } else {
+      setIsNew(true);
       setObtained(prev => [...prev, picked]);
     }
   };
@@ -42,17 +48,17 @@ function Gacha({ points, setPoints, obtained, setObtained }) {
           border: 'none',
           fontSize: '18px',
           fontWeight: 'bold',
-          cursor: 'pointer',
-          boxShadow: '0 4px 0 #ca8a04'
+          cursor: 'pointer'
         }}
       >
         ガチャを引く ({COST}pt)
       </button>
       
       {result && (
-        <div style={{ marginTop: '20px', padding: '15px', backgroundColor: '#f0f9ff', borderRadius: '10px', border: '2px dashed #3b82f6' }}>
-          <p style={{ margin: 0, fontSize: '14px', color: '#64748b' }}>ガチャの結果...</p>
-          <p style={{ fontSize: '28px', fontWeight: 'bold', color: '#1d4ed8', margin: '10px 0' }}>{result}</p>
+        <div style={{ marginTop: '20px', padding: '15px', backgroundColor: isNew ? '#fff7ed' : '#f1f5f9', borderRadius: '10px', border: isNew ? '2px solid #fb923c' : '2px solid #cbd5e1' }}>
+          <p style={{ margin: 0, fontSize: '14px' }}>{isNew ? '🌟 あたらしいピース！' : '☁️ ダブり...'}</p>
+          <p style={{ fontSize: '28px', fontWeight: 'bold', color: isNew ? '#ea580c' : '#64748b', margin: '10px 0' }}>{result}</p>
+          {!isNew && <p style={{ fontSize: '12px', color: '#94a3b8' }}>（すでに持っています）</p>}
         </div>
       )}
     </div>
